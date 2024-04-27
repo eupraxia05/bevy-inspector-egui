@@ -1,0 +1,18 @@
+[patch.crates-io]
+bevy = { path = "C:/ForkedRepos/bevy" }
+bevy_app = { path = "C:/ForkedRepos/bevy/crates/bevy_app" }
+bevy_asset = { path = "C:/ForkedRepos/bevy/crates/bevy_asset" }
+bevy_core = { path = "C:/ForkedRepos/bevy/crates/bevy_core" }
+bevy_ecs = { path = "C:/ForkedRepos/bevy/crates/bevy_ecs" }
+bevy_hierarchy = { path = "C:/ForkedRepos/bevy/crates/bevy_hierarchy" }
+bevy_log = { path = "C:/ForkedRepos/bevy/crates/bevy_log" }
+bevy_math = { path = "C:/ForkedRepos/bevy/crates/bevy_math" }
+bevy_reflect = { path = "C:/ForkedRepos/bevy/crates/bevy_reflect" }
+bevy_time = { path = "C:/ForkedRepos/bevy/crates/bevy_time" }
+bevy_utils = { path = "C:/ForkedRepos/bevy/crates/bevy_utils" }
+bevy_window = { path = "C:/ForkedRepos/bevy/crates/bevy_window" }
+bevy_core_pipeline = { path = "C:/ForkedRepos/bevy/crates/bevy_core_pipeline" }
+bevy_pbr = { path = "C:/ForkedRepos/bevy/crates/bevy_pbr" }
+bevy_render = { path = "C:/ForkedRepos/bevy/crates/bevy_render" }
+bevy_egui = { path = "C:/ForkedRepos/bevy_egui"}
+bevy_tasks = { path = "C:/ForkedRepos/bevy/crates/bevy_tasks"}

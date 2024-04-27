@@ -83,14 +83,18 @@ impl InspectorPrimitive for Handle<Mesh> {
         &mut self,
         ui: &mut egui::Ui,
         _: &dyn Any,
-        _: egui::Id,
-        env: InspectorUi<'_, '_>,
+        id: egui::Id,
+        mut env: InspectorUi<'_, '_>,
     ) -> bool {
-        let handle = &*self;
+        super::handle::handle_ui(self, ui, id, &mut env);
+        
         let Some(world) = &mut env.context.world else {
             no_world_in_context(ui, "Handle<Mesh>");
             return false;
         };
+
+        let handle = &*self;
+
         let mut meshes = match world.get_resource_mut::<Assets<Mesh>>() {
             Ok(meshes) => meshes,
             Err(error) => {

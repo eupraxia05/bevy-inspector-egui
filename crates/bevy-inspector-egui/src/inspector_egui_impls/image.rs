@@ -19,6 +19,7 @@ use crate::{
 };
 
 use super::InspectorPrimitive;
+use super::handle::handle_ui;
 
 mod image_texture_conversion;
 
@@ -28,7 +29,7 @@ impl InspectorPrimitive for Handle<Image> {
         ui: &mut egui::Ui,
         _: &dyn Any,
         id: egui::Id,
-        env: InspectorUi<'_, '_>,
+        mut env: InspectorUi<'_, '_>,
     ) -> bool {
         let Some(world) = &mut env.context.world else {
             let immutable_self: &Handle<Image> = self;
@@ -38,64 +39,7 @@ impl InspectorPrimitive for Handle<Image> {
 
         update_and_show_image(self, world, ui);
 
-        let (asset_server, images) =
-            match world.get_two_resources_mut::<bevy_asset::AssetServer, Assets<Image>>() {
-                (Ok(a), Ok(b)) => (a, b),
-                (a, b) => {
-                    if let Err(e) = a {
-                        show_error(e, ui, &pretty_type_name::<bevy_asset::AssetServer>());
-                    }
-                    if let Err(e) = b {
-                        show_error(e, ui, &pretty_type_name::<Assets<Image>>());
-                    }
-                    return false;
-                }
-            };
-
-        // get all loaded image paths
-        let mut image_paths = Vec::new();
-        for image in images.iter() {
-            if let Some(image_path) = asset_server.get_path(image.0) {
-                image_paths.push(image_path.to_string());
-            }
-        }
-
-        // first, get the typed search text from a stored egui data value
-        let mut selected_path = None;
-        let mut image_picker_search_text = String::from("");
-        ui.data_mut(|data| {
-            image_picker_search_text = data
-                .get_temp_mut_or_default::<String>(id.with("image_picker_search_text"))
-                .clone();
-        });
-
-        // build and show the dropdown
-        let dropdown = egui_dropdown::DropDownBox::from_iter(
-            image_paths.iter(),
-            id.with("image_picker"),
-            &mut image_picker_search_text,
-            |ui, path| {
-                let response = ui.selectable_label(false, path);
-                if response.clicked() {
-                    selected_path = Some(path.to_string());
-                }
-                response
-            },
-        );
-        ui.add(dropdown);
-
-        // update the typed search text
-        ui.data_mut(|data| {
-            *data.get_temp_mut_or_default::<String>(id.with("image_picker_search_text")) =
-                image_picker_search_text;
-        });
-
-        // if the user selected an option, update the image handle
-        if let Some(selected_path) = selected_path {
-            *self = asset_server.load(selected_path);
-        }
-
-        false
+        handle_ui(self, ui, id, &mut env)
     }
 
     fn ui_readonly(&self, ui: &mut egui::Ui, _: &dyn Any, _: egui::Id, env: InspectorUi<'_, '_>) {

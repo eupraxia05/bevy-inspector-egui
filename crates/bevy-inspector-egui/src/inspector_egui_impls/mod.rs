@@ -13,6 +13,7 @@ mod bevy_impls;
 mod glam_impls;
 mod image;
 mod std_impls;
+pub(crate) mod handle;
 
 type InspectorEguiImplFn =
     fn(&mut dyn Any, &mut egui::Ui, &dyn Any, egui::Id, InspectorUi<'_, '_>) -> bool;

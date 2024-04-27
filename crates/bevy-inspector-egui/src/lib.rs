@@ -144,7 +144,9 @@ pub mod restricted_world_view;
 mod egui_utils;
 mod utils;
 
+use bevy_app::Startup;
 pub use bevy_egui;
+use bevy_tasks::{TaskPool, AsyncComputeTaskPool};
 pub use egui;
 
 /// [`bevy_app::Plugin`] used to register default [`struct@InspectorOptions`] and [`InspectorEguiImpl`](crate::inspector_egui_impls::InspectorEguiImpl)s
@@ -154,6 +156,10 @@ impl bevy_app::Plugin for DefaultInspectorConfigPlugin {
         if app.is_plugin_added::<Self>() {
             return;
         }
+
+        AsyncComputeTaskPool::get_or_init(TaskPool::default);
+
+        app.add_systems(Startup, inspector_egui_impls::handle::update_assets);
 
         let type_registry = app.world.resource::<bevy_ecs::prelude::AppTypeRegistry>();
         let mut type_registry = type_registry.write();
